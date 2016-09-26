@@ -20,6 +20,8 @@ public:
             if( nums1[i1]==nums2[i2] && (result.empty() || result.back()!=nums1[i1]) )
             {
                 result.push_back( nums1[i1] );
+                ++i1;
+                ++i2;
             }
             else if( nums1[i1] < nums2[i2] )
             {
