@@ -1,0 +1,22 @@
+First thoughts:
+brutal force, or straight forward solutions
+repitition (with bitwise operation or not)
+recursion (with bitwise operation or not)
+
+Ideal solution:
+see solution.cpp
+
+Hint:
+1. How to bitwise detect if there is only one 1-bit in an integer?
+
+What makes 0010 0000, 0001 0000, or 0000 0100, different from, say, 0000 1100?
+0010 0000 - 0000 0001 = 0001 1111
+0001 0000 - 0000 0001 = 0000 1111
+0000 0100 - 0000 0001 = 0000 0011
+while
+0000 1100 - 0000 0001 = 0000 1011
+
+2. How to different a four's power from a two's power?
+
+math formula hint:
+pow(x,k) - 1 = (x-1)( pow(x,k-1)+pow(x,k-2)+pow(x,k-3)+...+pow(x,1)+1 )
