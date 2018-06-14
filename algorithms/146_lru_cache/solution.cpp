@@ -16,7 +16,6 @@ public:
         for( it = keyToNode_.begin(); it != keyToNode_.end(); ++it )
         {
             delete (it->second);
-            keyToNode_.erase( it->first );
         }
     }
 
@@ -75,7 +74,8 @@ public:
         Node* np = getNode(key);
         if( np )
         {
-            // already in double link list, move to head, no addition needed, no removal needed
+            // already in double link list, update value, move to head, no addition needed, no removal needed
+            np->value = value;
             touchNode(np);
         }
         else
@@ -118,7 +118,7 @@ public:
 
     void touchNode( Node* nodeToTouch )
     {
-        if( size_ == 1 )
+        if( size_ == 1 || nodeToTouch == head_ )
             return;
 
         // if node is not head
