@@ -1,3 +1,9 @@
+#include<unordered_map>
+#include<list>
+#include<iostream>
+
+using namespace std;
+
 class LFUCache {
 public:
     struct Data;
@@ -168,7 +174,7 @@ public:
  * obj.put(key,value);
  */
 
-/* int main()
+int main()
 {
     LFUCache lfu(2);
     lfu.put(1,1);
@@ -183,6 +189,7 @@ public:
     lfu.get(4);
 }
 
+/*
 Printing dataStore: from head to tail(k:1, v:1, f:1)->
 from tail to head(k:1, v:1, f:1)->
 Printing frequency mapkey:1->(k:1, v:1, f:1), 
