@@ -6,7 +6,7 @@
         {
             "label": "build",
             "command": "g++",
-            "args": ["algorithms/460_lfu_cache/solution.cpp", "-o", "algorithms/460_lfu_cache/solution.tsk"],
+            "args": ["-g","algorithms/44_wildcard_matching/solution.cpp", "-o", "algorithms/44_wildcard_matching/solution.tsk"],
         }
     ]
 }
