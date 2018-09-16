@@ -48,3 +48,5 @@ class Solution:
 
         val = int(s)
         return 1 if val >= 10 and val <= 26 else 0
+
+# be careful, '*' only counts for 1-9, not 0
