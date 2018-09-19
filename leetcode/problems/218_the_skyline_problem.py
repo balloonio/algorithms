@@ -7,11 +7,11 @@ class Solution:
         if not buildings:
             return []
 
-        building_edges = [] # [ (position, is_end, height) ]
+        building_edges = []  # [ (position, is_end, height) ]
         for i, building in enumerate(buildings):
             start, end, height = building
-            building_edges += [ (start, False, height, i) ]
-            building_edges += [ (end, True, height, i) ]
+            building_edges += [(start, False, height, i)]
+            building_edges += [(end, True, height, i)]
 
         building_edges.sort()
         curr_buildings = []
@@ -32,13 +32,13 @@ class Solution:
             # current tallest building at coor
             tallest = self.top_h(curr_buildings) if curr_buildings else 0
             if not outline:
-                outline.append( [coor, tallest] )
+                outline.append([coor, tallest])
             elif outline[-1][0] == coor:
                 outline[-1][1] = max(tallest, outline[-1][1])
             elif outline[-1][1] != tallest:
-                outline.append( [coor, tallest] )
+                outline.append([coor, tallest])
         return outline
-    
+
     def top_h(self, tall_heap):
         _, height, bid = tall_heap[0]
         return height
@@ -51,3 +51,8 @@ class Solution:
         coor, is_end, height, bid = edge
         heap_item = (-height, height, bid)
         heapq.heappush(tall_heap, heap_item)
+
+
+# pay attention to L36 - L39
+# at any same coordinate, the outline is the tallest of all the edges there
+# therefore, update the height in last outline if coordinate is the same
