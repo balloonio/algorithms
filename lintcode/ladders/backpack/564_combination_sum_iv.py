@@ -10,7 +10,6 @@ class Solution:
         if not nums or not target:
             return 0
 
-        n = len(nums)
         f = [0] * (target + 1)
         f[0] = 1
 
