@@ -1,5 +1,5 @@
 # algorithms
 This repo is to document my solutions and reflection on OJ questions, mostly on LeetCode and LintCode
 
-flake8 linter test
+# flake8 test
 [![Build Status](https://travis-ci.org/bolunzhang/algorithms.svg?branch=master)](https://travis-ci.org/bolunzhang/algorithms)
