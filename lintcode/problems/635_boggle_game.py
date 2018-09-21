@@ -26,7 +26,7 @@ class Solution:
         # write your code here
         if not board or not board[0]:
             return 0
-
+        linterror_test = None
         self.board = board
         self.h, self.w = len(self.board), len(self.board[0])
         self.trie = self.build_trie(words)
