@@ -4,6 +4,7 @@
 #         self.val = x
 #         self.next = None
 
+
 class Solution:
     def reverseList(self, head):
         """
@@ -23,4 +24,3 @@ class Solution:
             prev = curr
             curr = next
         return prev
-        

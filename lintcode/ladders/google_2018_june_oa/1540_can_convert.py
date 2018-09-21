@@ -11,28 +11,31 @@ output:
 true
 
 """
+
+
 class Solution:
     """
     @param s: string S
     @param t: string T
     @return: whether S can convert to T
     """
+
     def canConvert(self, s, t):
         # Write your code here
         if not t:
             return True
-        
+
         si, ti = 0, 0
-        
+
         while si < len(s):
             if ti == len(t):
-                #found 
+                # found
                 break
-            
+
             if s[si] == t[ti]:
-                si += 1 
-                ti += 1 
+                si += 1
+                ti += 1
             else:
-                si += 1 
-                
+                si += 1
+
         return ti == len(t)

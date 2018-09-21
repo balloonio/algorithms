@@ -8,7 +8,7 @@ class Solution(object):
         if not nums:
             return 0
 
-        return self.quick_select(nums, k, 0, len(nums)-1)
+        return self.quick_select(nums, k, 0, len(nums) - 1)
 
     def quick_select(self, nums, k, start, end):
         if start == end:
@@ -28,7 +28,7 @@ class Solution(object):
                 right -= 1
 
         if k - 1 <= right:
-            return self.quick_select(nums, k, start, right )
+            return self.quick_select(nums, k, start, right)
         elif k - 1 >= left:
             return self.quick_select(nums, k, left, end)
-        return nums[right+1]
+        return nums[right + 1]

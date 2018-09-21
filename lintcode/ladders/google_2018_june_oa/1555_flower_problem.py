@@ -26,6 +26,7 @@ Expected
 8
 """
 
+
 class Solution:
     """
     @param flowers: an array
@@ -33,6 +34,7 @@ class Solution:
     @param m: an integer
     @return: the last day
     """
+
     def __init__(self):
         self.bloom_slot = set()
         self.slot2father = {}
@@ -53,10 +55,10 @@ class Solution:
                 if k == 1:
                     self.father_with_k_slots.add(slot)
 
-            if slot-1 in self.bloom_slot:
-                self.union(slot, slot-1, k)
-            if slot+1 in self.bloom_slot:
-                self.union(slot, slot+1, k)
+            if slot - 1 in self.bloom_slot:
+                self.union(slot, slot - 1, k)
+            if slot + 1 in self.bloom_slot:
+                self.union(slot, slot + 1, k)
 
             if len(self.father_with_k_slots) >= m:
                 result = max(day + 1, result)

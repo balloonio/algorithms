@@ -13,19 +13,21 @@ Return:
 [[1,0,0,1,0],[0,1,0,0,1],[1,0,1,0,0],[1,1,0,1,1]]
 """
 
+
 class Solution:
     """
     @param Byte: 
     @return: return the answer after flipped
     """
+
     def flippedByte(self, Byte):
         # Write your code here
         if not Byte or not Byte[0]:
             return None
-            
+
         for b in Byte:
             b.reverse()
             for i in range(len(b)):
                 b[i] = 1 if b[i] == 0 else 0
-        
+
         return Byte

@@ -6,13 +6,14 @@
 #         self.right = None
 #         self.next = None
 
+
 class Solution:
     # @param root, a tree link node
     # @return nothing
     def connect(self, root):
         if not root:
-            return 
-        
+            return
+
         level_head = root
         last_level_head = None
         while level_head:
@@ -22,8 +23,12 @@ class Solution:
                 if not last_level_head:
                     level_curr.next = None
                 else:
-                    level_curr.next = last_level_head.right if is_curr_left else last_level_head.left
-                    last_level_head = last_level_head.next if is_curr_left else last_level_head
+                    level_curr.next = (
+                        last_level_head.right if is_curr_left else last_level_head.left
+                    )
+                    last_level_head = (
+                        last_level_head.next if is_curr_left else last_level_head
+                    )
                 is_curr_left = not is_curr_left
                 level_curr = level_curr.next
             last_level_head = level_head

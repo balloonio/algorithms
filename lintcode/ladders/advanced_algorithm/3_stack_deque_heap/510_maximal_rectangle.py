@@ -3,20 +3,20 @@ class Solution:
     @param matrix: a boolean 2D matrix
     @return: an integer
     """
+
     def maximalRectangle(self, matrix):
         # write your code here
 
         if not matrix or not matrix[0]:
             return 0
 
-        prerow_sum = self.get_prerow_sum( matrix)
+        prerow_sum = self.get_prerow_sum(matrix)
         result = 0
         for row in prerow_sum:
-            area = self.get_row_max( row)
-            result = max(area, result )
+            area = self.get_row_max(row)
+            result = max(area, result)
 
         return result
-
 
     def get_row_max(self, heights):
         indices_stack = []
@@ -32,9 +32,12 @@ class Solution:
         return area
 
     def get_prerow_sum(self, m):
-        ps = [[] for _ in range(len(m)) ]
+        ps = [[] for _ in range(len(m))]
 
         for i in range(len(m)):
-            ps[i] = [ (((ps[i-1][x] if i-1>=0 else 0) + 1) if m[i][x] else 0) for x in range(len(m[0])) ]
+            ps[i] = [
+                (((ps[i - 1][x] if i - 1 >= 0 else 0) + 1) if m[i][x] else 0)
+                for x in range(len(m[0]))
+            ]
 
         return ps

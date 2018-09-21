@@ -18,10 +18,11 @@ class Solution(object):
         return result
 
     def get_hash(self, word):
-        hash = [0]*26
+        hash = [0] * 26
         for c in word:
-            hash[ord(c)-ord('a')] += 1
+            hash[ord(c) - ord("a")] += 1
         return tuple(hash)
+
 
 # remember list is not hashable but mutable
 #          tuple is hashable but immutable

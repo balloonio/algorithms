@@ -3,6 +3,7 @@ class Solution:
     @param height: A list of integer
     @return: The area of largest rectangle in the histogram
     """
+
     def largestRectangleArea(self, heights):
         # write your code here
         if not heights:
@@ -24,7 +25,11 @@ class Solution:
                 # before_popped = the last index on left with height smaller than heights[last_popped]
                 area = 0
                 area += heights[last_popped] * (i - last_popped)
-                area += heights[last_popped] * (last_popped - before_popped - 1 if before_popped is not None else last_popped)
+                area += heights[last_popped] * (
+                    last_popped - before_popped - 1
+                    if before_popped is not None
+                    else last_popped
+                )
                 result = max(result, area)
 
             mono_stack.append(i)

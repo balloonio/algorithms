@@ -7,7 +7,7 @@ class Solution(object):
         if not nums:
             return
 
-        zero_idx, i, two_idx = 0, 0, len(nums)-1
+        zero_idx, i, two_idx = 0, 0, len(nums) - 1
 
         while i <= two_idx:
             if nums[i] == 0:
@@ -20,5 +20,6 @@ class Solution(object):
                 nums[two_idx], nums[i] = nums[i], nums[two_idx]
                 two_idx -= 1
         return
+
 
 # L12 '<' would be a bug. It has too be '<=' because we need to check two_idx

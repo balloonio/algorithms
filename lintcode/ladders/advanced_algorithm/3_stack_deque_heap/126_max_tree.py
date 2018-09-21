@@ -6,11 +6,13 @@ class TreeNode:
         self.left, self.right = None, None
 """
 
+
 class Solution:
     """
     @param A: Given an integer array with no duplicates.
     @return: The root of max tree.
     """
+
     def maxTree(self, A):
         # write your code here
         if not A:

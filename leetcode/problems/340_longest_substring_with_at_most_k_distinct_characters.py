@@ -16,13 +16,13 @@ class Solution:
         while start < n and end < n:
             # extend end pointer
             # so that s[start:end] is the max possible starting from s[start]
-            while end < n :
+            while end < n:
                 char = s[end]
                 if char not in window and len(window) == k:
                     break
                 window[char] += 1
                 end += 1
-            # record max 
+            # record max
             result = s[start:end] if end - start > len(result) else result
             # extend start pointer until 1 distinct char is removed from window
             dist_char = len(window)

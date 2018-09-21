@@ -10,6 +10,7 @@ class Memcache:
     @param: key: An integer
     @return: An integer
     """
+
     def get(self, curtTime, key):
         # write your code here
         self.check_expire(curtTime)
@@ -24,19 +25,22 @@ class Memcache:
     @param: ttl: An integer
     @return: nothing
     """
+
     def set(self, curtTime, key, value, ttl):
         # write your code here
         self.check_expire(curtTime)
         self.delete(curtTime, key)
         self.key2value[key] = value
         if ttl:
-            self.expire2keys[curtTime+ttl].add(key)
-            self.key2expire[key] = curtTime+ttl
+            self.expire2keys[curtTime + ttl].add(key)
+            self.key2expire[key] = curtTime + ttl
+
     """
     @param: curtTime: An integer
     @param: key: An integer
     @return: nothing
     """
+
     def delete(self, curtTime, key):
         # write your code here
         self.check_expire(curtTime)
@@ -54,6 +58,7 @@ class Memcache:
     @param: delta: An integer
     @return: An integer
     """
+
     def incr(self, curtTime, key, delta):
         # write your code here
         self.check_expire(curtTime)
@@ -61,12 +66,14 @@ class Memcache:
             return 2147483647
         self.key2value[key] += delta
         return self.key2value[key]
+
     """
     @param: curtTime: An integer
     @param: key: An integer
     @param: delta: An integer
     @return: An integer
     """
+
     def decr(self, curtTime, key, delta):
         # write your code here
         self.check_expire(curtTime)
@@ -82,6 +89,7 @@ class Memcache:
                 self.key2value.pop(key)
                 self.key2expire.pop(key)
             self.expire2keys.pop(curtTime)
+
 
 # pay attention that set key can refresh time
 # pay attention that key might not have an entry in key2expire

@@ -6,11 +6,11 @@ class Solution:
         """
         if not A:
             return []
-        
+
         max_or = 0
         for num in A:
             max_or |= num
-            
+
         result = set()
         n = len(A)
         for start in range(n):
@@ -20,7 +20,8 @@ class Solution:
                 result.add(or_val)
                 if or_val == max_or:
                     break
-        
+
         return len(result)
+
 
 # must read - https://leetcode.com/problems/bitwise-ors-of-subarrays/discuss/165933/Python-Dynamic-programming-solution-with-indepth-explanation-of-intuition.

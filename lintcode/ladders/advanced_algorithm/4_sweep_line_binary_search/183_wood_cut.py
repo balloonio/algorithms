@@ -4,6 +4,7 @@ class Solution:
     @param k: An integer
     @return: The maximum length of the small pieces
     """
+
     def woodCut(self, L, k):
         # write your code here
         if not L:

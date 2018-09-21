@@ -6,11 +6,13 @@ class Interval(object):
         self.end = end
 """
 
+
 class Solution:
     """
     @param intervals: an array of meeting time intervals
     @return: the minimum number of conference rooms required
     """
+
     def minMeetingRooms(self, intervals):
         # Write your code here
         if not intervals:
@@ -18,8 +20,8 @@ class Solution:
 
         events = []
         for interval in intervals:
-            events += [ (interval.start, True) ]
-            events += [ (interval.end, False) ]
+            events += [(interval.start, True)]
+            events += [(interval.end, False)]
 
         events.sort()
 

@@ -1,4 +1,4 @@
-'''
+"""
 Description
 Write a function that add two numbers A and B.
 
@@ -17,4 +17,4 @@ Given a=1 and b=2 return 3.
 
 Challenge
 Of course you can just return a + b to get accepted. But Can you challenge not do it like that?(You should not use + or any arithmetic operators.)
-'''
+"""

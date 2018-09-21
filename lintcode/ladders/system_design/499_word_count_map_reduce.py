@@ -6,10 +6,10 @@ class WordCount:
         # Please use 'yield key, value'
         buffer = ""
         for c in line:
-            if c == ' ' and buffer:
+            if c == " " and buffer:
                 yield buffer, 1
                 buffer = ""
-            elif c != ' ':
+            elif c != " ":
                 buffer += c
         if buffer:
             yield buffer, 1

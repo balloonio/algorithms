@@ -12,7 +12,7 @@ class Solution(object):
 
         q = collections.deque()
         visited = set()
-        q.append( (beginWord, 1) )
+        q.append((beginWord, 1))
         visited.add(beginWord)
 
         while q:
@@ -25,18 +25,17 @@ class Solution(object):
                     continue
                 if transform == endWord:
                     return step + 1
-                q.append( (transform, step+1) )
+                q.append((transform, step + 1))
                 visited.add(transform)
         return 0
-
 
     def get_all_trans(self, word):
         trans = []
         for i, c in enumerate(word):
-            for nc in 'abcdefghijklmnopqrstuvwxyz':
+            for nc in "abcdefghijklmnopqrstuvwxyz":
                 if c == nc:
                     continue
-                nw = word[:i] + nc + word[i+1:]
+                nw = word[:i] + nc + word[i + 1 :]
                 trans.append(nw)
         return trans
 
@@ -45,6 +44,7 @@ class Solution(object):
         for word in words:
             dict.add(word)
         return dict
+
 
 # be careful with queue popleft() not pop()
 # also be careful with step increment

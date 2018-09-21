@@ -24,7 +24,9 @@ class Solution:
                 if f[i - 1][j]:
                     f[i][j] = True
                 elif j - value[i - 1] >= 0 and f[i][j - value[i - 1]]:
-                    f[i][j] = True if used_coin[j - value[i - 1]] < amount[i-1] else False
+                    f[i][j] = (
+                        True if used_coin[j - value[i - 1]] < amount[i - 1] else False
+                    )
                     used_coin[j] = used_coin[j - value[i - 1]] + 1
 
                 if i == n:

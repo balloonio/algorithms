@@ -14,9 +14,9 @@ class Solution(object):
         h, w = len(board), len(board[0])
         for i in range(h):
             for j in range(w):
-                visited.add( (i,j) )
+                visited.add((i, j))
                 found = self.helper(board, i, j, word, 0, visited)
-                visited.remove( (i,j) )
+                visited.remove((i, j))
                 if found:
                     return True
         return False
@@ -28,9 +28,9 @@ class Solution(object):
             return True
 
         for (ni, nj) in self.get_nearby_unvisited(board, i, j, visited):
-            visited.add( (ni,nj) )
-            found = self.helper(board, ni, nj, word, widx+1, visited)
-            visited.remove( (ni, nj) )
+            visited.add((ni, nj))
+            found = self.helper(board, ni, nj, word, widx + 1, visited)
+            visited.remove((ni, nj))
             if found:
                 return True
         return False
@@ -38,14 +38,15 @@ class Solution(object):
     def get_nearby_unvisited(self, board, i, j, visited):
         h, w = len(board), len(board[0])
         result = []
-        for (di, dj) in [(0,1),(1,0),(0,-1),(-1,0)]:
-            ni, nj = i + di,  j+ dj
+        for (di, dj) in [(0, 1), (1, 0), (0, -1), (-1, 0)]:
+            ni, nj = i + di, j + dj
             if ni < 0 or ni >= h or nj < 0 or nj >= w:
                 continue
             if (ni, nj) in visited:
                 continue
-            result.append( (ni, nj) )
+            result.append((ni, nj))
         return result
+
 
 # be careful with edge case where board has only one letter
 # in that case L30-L35 has no coordinate to explore thus return False

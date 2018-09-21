@@ -19,22 +19,22 @@ class Solution:
         #   3. if the stuff before this * matches the current s, then match
 
         # f[i][j] = p[:i] matches s[:j] or not
-        f = [ [False] * (slen + 1) for _ in range(plen + 1) ]
+        f = [[False] * (slen + 1) for _ in range(plen + 1)]
         f[0][0] = True
 
         for i in range(1, plen + 1):
             for j in range(slen + 1):
                 if j == 0:
-                    f[i][j] = p[i-1] == '*' and f[i-1][j]
+                    f[i][j] = p[i - 1] == "*" and f[i - 1][j]
                     continue
-                char = p[i-1]
-                if ord(char) >= ord('a') and ord(char) <= ord('z'):
-                    f[i][j] = f[i-1][j-1] and p[i-1] == s[j-1]
-                elif char == '?':
-                    f[i][j] = f[i-1][j-1]
-                elif char == '*':
-                    f[i][j] = f[i-1][j-1] or f[i][j-1] or f[i-1][j]
-        #print(f)
+                char = p[i - 1]
+                if ord(char) >= ord("a") and ord(char) <= ord("z"):
+                    f[i][j] = f[i - 1][j - 1] and p[i - 1] == s[j - 1]
+                elif char == "?":
+                    f[i][j] = f[i - 1][j - 1]
+                elif char == "*":
+                    f[i][j] = f[i - 1][j - 1] or f[i][j - 1] or f[i - 1][j]
+        # print(f)
         return f[plen][slen]
 
 

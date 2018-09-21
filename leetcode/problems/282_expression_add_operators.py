@@ -22,8 +22,8 @@ class Solution:
 
         # edge case
         if last is None:
-            if num[idx] == '0':
-                self.helper(num, idx+1, 0, 0, target, '0', result)
+            if num[idx] == "0":
+                self.helper(num, idx + 1, 0, 0, target, "0", result)
                 return
             size = len(num)
             for end in range(idx, size):
@@ -33,15 +33,15 @@ class Solution:
                 self.helper(num, end, val, val, target, form, result)
             return
 
-        if num[idx] == '0':
-            form += '+0'
-            self.helper(num, idx+1, carried, 0, target, form, result)
+        if num[idx] == "0":
+            form += "+0"
+            self.helper(num, idx + 1, carried, 0, target, form, result)
             form = form[:-2]
-            form += '-0'
-            self.helper(num, idx+1, carried, 0, target, form, result)
+            form += "-0"
+            self.helper(num, idx + 1, carried, 0, target, form, result)
             form = form[:-2]
-            form += '*0'
-            self.helper(num, idx+1, carried-last, 0, target, form, result)
+            form += "*0"
+            self.helper(num, idx + 1, carried - last, 0, target, form, result)
             form = form[:-2]
             return
 
@@ -51,15 +51,17 @@ class Solution:
             val = int(num[idx:end])
             form_size = len(form)
             # plus +
-            form += '+' + str(val)
-            self.helper(num, end, carried+val, val, target, form, result)
+            form += "+" + str(val)
+            self.helper(num, end, carried + val, val, target, form, result)
             form = form[:form_size]
             # minus -
-            form += '-' + str(val)
-            self.helper(num, end, carried-val, -val, target, form, result)
+            form += "-" + str(val)
+            self.helper(num, end, carried - val, -val, target, form, result)
             form = form[:form_size]
             # multiply *
-            form += '*' + str(val)
-            self.helper(num, end, carried-last+last*val, last*val, target, form, result)
+            form += "*" + str(val)
+            self.helper(
+                num, end, carried - last + last * val, last * val, target, form, result
+            )
             form = form[:form_size]
         return
