@@ -83,8 +83,61 @@ Assume all four edges of the grid are all surrounded by wall.
 
 
 class Solution:
+    def __init__(self):
+        self.robot = None
+        self.visited = set()
+
     def cleanRoom(self, robot):
         """
         :type robot: Robot
         :rtype: None
         """
+        self.robot = robot
+        self.traverse(0, 0, 0)
+
+    # facing is 0: up, 1: right, 2: down, 3: left
+    def traverse(self, thisx, thisy, facing):
+        visited = self.visited
+        robot = self.robot
+        # robot is already here meaning this room is available
+        # added room to visited and clean room
+        visited.add((thisx, thisy))
+        robot.clean()
+        # loop through all facings starting from the current facing
+        # visited the next room on the current facing if unvisted and available
+        newfacing = facing
+        for _ in range(4):
+            nx, ny = self.get_next_room_facing(thisx, thisy, newfacing)
+            # if next room visited or blocked, turn right to next facing
+            if (nx, ny) in visited:
+                newfacing = (newfacing + 1) % 4
+                robot.turnRight()
+                continue
+            if not robot.move():
+                newfacing = (newfacing + 1) % 4
+                robot.turnRight()
+                continue
+            # already moved to the new room, dfs to next level
+            self.traverse(nx, ny, newfacing)
+            newfacing = (newfacing + 1) % 4
+            robot.turnRight()
+        # backtrack to the previous room with same facing as when it entered
+        self.turn180()
+        robot.move()
+        self.turn180()
+
+    def turn180(self):
+        self.robot.turnRight()
+        self.robot.turnRight()
+
+    def get_next_room_facing(self, thisx, thisy, facing):
+        delta = [(-1, 0), (0, 1), (1, 0), (0, -1)]
+        dx, dy = delta[facing]
+        return thisx + dx, thisy + dy
+
+
+"""
+My thoughs?
+Dont be scared by the problems!
+This is simply a backtrack DFS!
+"""
