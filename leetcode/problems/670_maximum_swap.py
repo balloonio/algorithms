@@ -16,7 +16,6 @@ class Solution:
             heap.append((-digit, -i))
         heapq.heapify(heap)
 
-        resultstr = ""
         for i, c in enumerate(numstr):
             digit = int(c)
             if digit == self.top_digit(heap, removed):

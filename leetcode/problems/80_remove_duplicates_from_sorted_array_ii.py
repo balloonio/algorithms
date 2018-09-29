@@ -30,7 +30,7 @@ class Solution:
 #    Wrote in my own non-genius readable language
 
 
-class Solution:
+class Solution:  # noqa: F811
     def removeDuplicates(self, nums):
         """
         :type nums: List[int]

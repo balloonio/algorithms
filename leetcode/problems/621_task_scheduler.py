@@ -52,7 +52,7 @@ class Solution:
 
 
 # 2. Using heapq
-class Solution:
+class Solution:  # noqa: F811
     def leastInterval(self, tasks, n):
         """
         :type tasks: List[str]
