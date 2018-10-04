@@ -1,4 +1,5 @@
 import random, collections
+DIRECTIONS = [(1,0), (0,-1), (-1,0), (0,1)]
 class Solution:
     """
     start : coordinate (x, y) must be on the border
@@ -12,17 +13,45 @@ class Solution:
         side = n - 1
         queue = collections.deque()
         self.draw_border(start, end, board, queue)
-        DIRECTIONS = [(1,0), (0,-1), (-1,0), (0,1)]
 
         while queue:
             x, y, dir = queue.popleft()
+            dx, dy = DIRECTIONS[dir]
             for delta in range(1, n):
-                dx, dy = DIRECTIONS[dir]
                 nx, ny = x + dx * delta, y + dy * delta
-                if not self.valid_to_wall(nx, ny, board):
+                if not self.valid_to_wall(nx, ny, board, dir):
                     break
-                
+            if delta == 1:
+                continue
+            randdelta = random.choice(range(1,delta))
+            for delta in range(1, randdelta+1):
+                nx, ny = x + dx * delta, y + dy * delta
+                board[nx][ny] = '*'
+                queue.append( (nx,ny,(dir+3)%4) )
+                queue.append( (nx,ny,(dir+1)%4) )
 
+    def valid_to_wall(self, x, y, board, dir):
+        dx, dy = DIRECTIONS[dir]
+        x1, y1 = x + dx, y + dy
+        dx, dy = DIRECTIONS[(dir+1)%4]
+        x2, y2 = x + dx, y + dy
+        x3, y3 = x1 + dx, y1 + dy
+        x4, y4 = x - dx, y - dy
+        x5, y5 = x1 - dx, y1 - dy
+        return self.is_empty(x,y,board)   \
+           and self.is_empty(x1,y1,board) \
+           and self.is_empty(x2,y2,board) \
+           and self.is_empty(x3,y3,board) \
+           and self.is_empty(x4,y4,board) \
+           and self.is_empty(x5,y5,board)
+
+    def is_empty(self, x, y, board):
+        h, w = len(board), len(board[0])
+        if x < 0 or x >= h or y < 0 or y >= w:
+            return False
+        if board[x][y] == '*':
+            return False
+        return True
 
     def draw_border(self, start, end, board, queue):
         h, w = len(board), len(board[0])
@@ -71,4 +100,24 @@ class Solution:
             return (i, 0)
 
 sol = Solution()
-sol.test(5)
+sol.test(15)
+
+"""
+            
+* *   * * * * * * * * * * * *
+*     *   *   *   *   *     *
+* *   *   *   *   *   *   * *
+*     *   *       *   *     *
+* *   *   * *         *   * *
+*     *   *         * *     *
+* *   *       *       *   * *
+*     * * * * * *   * *     *
+* *                   *   * *
+*     *   *   *     * *     *
+* * * * * * * * *     *   * *
+*         *           *     *
+* * * *       *   *       * *
+*         *   *   *   *     *
+* *   * * * * * * * * * * * *
+
+"""
