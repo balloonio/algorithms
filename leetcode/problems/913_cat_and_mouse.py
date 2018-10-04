@@ -67,3 +67,41 @@ class Solution:
                 res = 0
         memo[key] = res
         return memo[key]
+
+
+# The below bottom-up coloring solution is based on the LeetCode official solution
+# This one can pass all the cases so far
+DRAW, MOUSE, CAT = 0, 1, 2
+
+
+class Solution:
+    def catMouseGame(self, graph):
+        """
+        :type graph: List[List[int]]
+        :rtype: int
+        """
+
+        # define state
+        # (cat position, mouse position, mouse turn/cat turn)
+        # 1. build a map { each state node : its parent nodes }
+        #    N's parent nodes = all the state node that can reach N in the next turn
+        n2parents = self.build_node_to_parents(graph)
+
+        # define 2 colors: 1.MOUSE WIN 2.CAT WIN (0.DRAW is considered no color)
+        # 2. color all the base case state nodes, and push to queue
+        #    queue maintains colored nodes only (DRAW is not queued)
+
+        # 3. For all queued nodes, color their parents with the optimal decision if possible
+        #    e.g. If the parent is CAT turn and queued node is CAT WIN, then the parent node is colored CAT
+        #    If optimal coloring is not possible, we decrease the unevaluated children of this parent.
+        #    When all the children are evaluated and this parent is still not colored, it means all the children are LOSS moves
+        #    Only now we color the parent with the LOSS color
+        #    e.g. If the parent is CAT turn and queued node is MOUSE WIN,
+        #         we cannot determine the color until all children node of this parents are evaluated
+        #         (And it is not ganruanteed all the children will be evaluated, because the DRAW ones will not be queue)
+        #         (In this case the parent will just stay DRAW because no definite coloring can be done)
+
+    def build_node_to_parents(self, graph):
+        for node, connects in enumerate(graph):
+            for connect in connects:
+                pass
