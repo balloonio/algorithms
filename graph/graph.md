@@ -12,4 +12,7 @@ Hungarian algorithm (maximum matching)
 
 Shortest Path
 BFS (Weightless edge shortest path)
-Dijkstra's Algorithm (single source, simple to Prim's, keep pulling from hashheap of vertice distance)
+Dijkstra's Algorithm (single source, non-negative weight, simple to Prim's, keep pulling from hashheap of vertice distance)
+
+Maximum Flow
+Ford Fulkerson method Edomonds Karp algorithm (BFS + parent map + visited map)
