@@ -180,5 +180,5 @@ class Solution:
 """
 L129 skip the ones already colored
 L163 L164 skip 0 cat location, otherwise the p2degrees count would be wrong here
-or just simply count the indegree separately as in count_node_degree 
+or just simply count the indegree separately as in count_node_degree
 """
