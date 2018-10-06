@@ -90,6 +90,23 @@ class Solution:
         # define 2 colors: 1.MOUSE WIN 2.CAT WIN (0.DRAW is considered no color)
         # 2. color all the base case state nodes, and push to queue
         #    queue maintains colored nodes only (DRAW is not queued)
+        color = collections.defaultdict(int)
+        n = len(graph)
+        for cat_pos in range(n):
+            for mouse_pos in range(n):
+                # status when mouse is at hole
+                if mouse_pos == 0:
+                    color[cat_pos, mouse_pos, MOUSE] = MOUSE
+                    color[cat_pos, mouse_pos, CAT] = MOUSE
+                # status when cat caught mouse and not at hole
+                elif cat_pos == mouse_pos and cat_pos != 0:
+                    color[cat_pos, mouse_pos, MOUSE] = CAT
+                    color[cat_pos, mouse_pos, CAT] = CAT
+
+        queue = collections.deque()
+        for status, color in color.items():
+            if color != DRAW:
+                queue.append(status)
 
         # 3. For all queued nodes, color their parents with the optimal decision if possible
         #    e.g. If the parent is CAT turn and queued node is CAT WIN, then the parent node is colored CAT
@@ -101,7 +118,13 @@ class Solution:
         #         (And it is not ganruanteed all the children will be evaluated, because the DRAW ones will not be queue)
         #         (In this case the parent will just stay DRAW because no definite coloring can be done)
 
+        while queue:
+            status = queue.popleft()
+            # for parent in n2parent
+
     def build_node_to_parents(self, graph):
-        for node, connects in enumerate(graph):
-            for connect in connects:
+        n = len(graph)
+        n2parents = collections.defaultdict(set)
+        for cat_pos in range(n):
+            for mouse_pos in range(n):
                 pass
