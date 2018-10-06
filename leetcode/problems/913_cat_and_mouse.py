@@ -86,22 +86,22 @@ class Solution:
         # 1. build a map { each state node : its parent nodes }
         #    N's parent nodes = all the state node that can reach N in the next turn
         n2parents, p2degree = self.build_node_to_parents(graph)
-
+        # print(p2degree)
+        # p2degree = self.count_node_degree(graph)
+        # print(p2degree)
         # define 2 colors: 1.MOUSE WIN 2.CAT WIN (0.DRAW is considered no color)
         # 2. color all the base case state nodes, and push to queue
         #    queue maintains colored nodes only (DRAW is not queued)
         color = collections.defaultdict(int)
         n = len(graph)
         for cat_pos in range(n):
-            for mouse_pos in range(n):
-                # status when mouse is at hole
-                if mouse_pos == 0:
-                    color[cat_pos, mouse_pos, MOUSE] = MOUSE
-                    color[cat_pos, mouse_pos, CAT] = MOUSE
-                # status when cat caught mouse and not at hole
-                elif cat_pos == mouse_pos and cat_pos != 0:
-                    color[cat_pos, mouse_pos, MOUSE] = CAT
-                    color[cat_pos, mouse_pos, CAT] = CAT
+            # status when mouse is at hole
+            color[cat_pos, 0, MOUSE] = MOUSE
+            color[cat_pos, 0, CAT] = MOUSE
+            # status when cat caught mouse and not at hole
+            if cat_pos != 0:
+                color[cat_pos, cat_pos, MOUSE] = CAT
+                color[cat_pos, cat_pos, CAT] = CAT
 
         queue = collections.deque()
         for status, c in color.items():
@@ -126,6 +126,8 @@ class Solution:
                 # if current node is same color as the previous parent turn
                 # meaning this node is CAT win and previously it was cat TURN from a node that can reach this one
                 # mark the parent node the winning color
+                if color[parent] != DRAW:
+                    continue
                 if color[status] == par_turn:
                     color[parent] = color[status]
                     queue.append(parent)
@@ -137,9 +139,18 @@ class Solution:
                         color[parent] = CAT if par_turn == MOUSE else MOUSE
                         queue.append(parent)
 
-        for status, c in color.items():
-            print(status, c)
         return color[2, 1, MOUSE]
+
+    def count_node_degree(self, graph):
+        p2degree = collections.defaultdict(int)
+        n = len(graph)
+        for cat_pos in range(n):
+            for mouse_pos in range(n):
+                p2degree[cat_pos, mouse_pos, MOUSE] = len(graph[mouse_pos])
+                p2degree[cat_pos, mouse_pos, CAT] = len(graph[cat_pos]) - graph[
+                    cat_pos
+                ].count(0)
+        return p2degree
 
     def build_node_to_parents(self, graph):
         # status node to the parents status nodes that can reach itself in the next turn
@@ -149,6 +160,8 @@ class Solution:
         n = len(graph)
         # enumerate all status nodes
         for cat_pos in range(n):
+            if cat_pos == 0:
+                continue
             for mouse_pos in range(n):
                 # cat turn to previous mouse turn move
                 for connect in graph[mouse_pos]:
@@ -162,3 +175,10 @@ class Solution:
                         )
                         p2degrees[connect, mouse_pos, CAT] += 1
         return n2parents, p2degrees
+
+
+"""
+L129 skip the ones already colored
+L163 L164 skip 0 cat location, otherwise the p2degrees count would be wrong here
+or just simply count the indegree separately as in count_node_degree 
+"""
