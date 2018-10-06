@@ -85,7 +85,7 @@ class Solution:
         # (cat position, mouse position, mouse turn/cat turn)
         # 1. build a map { each state node : its parent nodes }
         #    N's parent nodes = all the state node that can reach N in the next turn
-        n2parents = self.build_node_to_parents(graph)
+        n2parents, p2degree = self.build_node_to_parents(graph)
 
         # define 2 colors: 1.MOUSE WIN 2.CAT WIN (0.DRAW is considered no color)
         # 2. color all the base case state nodes, and push to queue
@@ -104,8 +104,8 @@ class Solution:
                     color[cat_pos, mouse_pos, CAT] = CAT
 
         queue = collections.deque()
-        for status, color in color.items():
-            if color != DRAW:
+        for status, c in color.items():
+            if c != DRAW:
                 queue.append(status)
 
         # 3. For all queued nodes, color their parents with the optimal decision if possible
@@ -120,11 +120,45 @@ class Solution:
 
         while queue:
             status = queue.popleft()
-            # for parent in n2parent
+            curr_cat, curr_mouse, curr_turn = status
+            for parent in n2parents[status]:
+                par_cat, par_mouse, par_turn = parent
+                # if current node is same color as the previous parent turn
+                # meaning this node is CAT win and previously it was cat TURN from a node that can reach this one
+                # mark the parent node the winning color
+                if color[status] == par_turn:
+                    color[parent] = color[status]
+                    queue.append(parent)
+                # no winning move can be made for now, lets decrease the parents node degree
+                # when it reaches 0, it means all moves were losing move, then mark the opposite color
+                else:
+                    p2degree[parent] -= 1
+                    if p2degree[parent] == 0:
+                        color[parent] = CAT if par_turn == MOUSE else MOUSE
+                        queue.append(parent)
+
+        for status, c in color.items():
+            print(status, c)
+        return color[2, 1, MOUSE]
 
     def build_node_to_parents(self, graph):
-        n = len(graph)
+        # status node to the parents status nodes that can reach itself in the next turn
+        # (cat 5, mouse 0, cat turn) => (cat 5, mouse 2, mouse turn) if 0 and 2 are connected in graph
         n2parents = collections.defaultdict(set)
+        p2degrees = collections.defaultdict(int)
+        n = len(graph)
+        # enumerate all status nodes
         for cat_pos in range(n):
             for mouse_pos in range(n):
-                pass
+                # cat turn to previous mouse turn move
+                for connect in graph[mouse_pos]:
+                    n2parents[cat_pos, mouse_pos, CAT].add((cat_pos, connect, MOUSE))
+                    p2degrees[cat_pos, connect, MOUSE] += 1
+                # mouse turn to previous cat turn move
+                for connect in graph[cat_pos]:
+                    if connect != 0:
+                        n2parents[cat_pos, mouse_pos, MOUSE].add(
+                            (connect, mouse_pos, CAT)
+                        )
+                        p2degrees[connect, mouse_pos, CAT] += 1
+        return n2parents, p2degrees
