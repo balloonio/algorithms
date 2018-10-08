@@ -74,7 +74,7 @@ class Solution:
 DRAW, MOUSE, CAT = 0, 1, 2
 
 
-class Solution:
+class Solution: # noqa: F811
     def catMouseGame(self, graph):
         """
         :type graph: List[List[int]]

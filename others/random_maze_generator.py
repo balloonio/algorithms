@@ -1,4 +1,4 @@
-import random, collections
+import random
 
 DIRECTIONS = [(1, 0), (0, -1), (-1, 0), (0, 1)]
 
@@ -14,7 +14,6 @@ class Solution:
         if not board or not board[0]:
             return
         n = len(board)
-        side = n - 1
         walls = set()
         self.draw_border(start, end, board, walls)
 
