@@ -66,7 +66,7 @@ class Solution:
 #    我们不妨从反方向思考试着理解 如果一个工人i他的Wi是无穷小 Qi是无穷大,那他是不可能成为这个短板的
 #    因为他做了将近百分百的活 却只要求几乎零的工资 一定是k个工人里的其他人无法满足自己的最低工资而抱怨
 #    所以这个短板将会出现在Wi/Qi最大的那个工人身上
-class Solution:
+class Solution:  # noqa: F811
     def mincostToHireWorkers(self, quality, wage, K):
         """
         :type quality: List[int]
