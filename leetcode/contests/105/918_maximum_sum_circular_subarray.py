@@ -43,3 +43,25 @@ L20 第二次提交漏掉了 这里因为是数组最大和 所以就算pop的�
 4. 这个时候记得把元素放入双端队列
 这道题和 1616_shortest_subarray_ii 超级像, 一定对比来看
 """
+
+"""
+话还没说满 lc上去看了下别人的速度 才发现还有更快的解法..连额外空间都不需要
+"""
+
+
+class Solution:  # noqa: F811
+    def maxSubarraySumCircular(self, A):
+        """
+        :type A: List[int]
+        :rtype: int
+        """
+        maxSum, minSum = float("-inf"), float("inf")
+        curMax, curMin = 0, 0
+        total = 0
+        for a in A:
+            curMax = max(curMax + a, a)
+            maxSum = max(maxSum, curMax)
+            curMin = min(curMin + a, a)
+            minSum = min(minSum, curMin)
+            total += a
+        return maxSum if maxSum < 0 else max(maxSum, total - minSum)
