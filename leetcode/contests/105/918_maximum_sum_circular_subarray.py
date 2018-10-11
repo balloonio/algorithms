@@ -65,3 +65,35 @@ class Solution:  # noqa: F811
             minSum = min(minSum, curMin)
             total += a
         return maxSum if maxSum < 0 else max(maxSum, total - minSum)
+
+
+class Solution:  # noqa: F811
+    def maxSubarraySumCircular(self, A):
+        """
+        :type A: List[int]
+        :rtype: int
+        """
+        max_ending_here = 0
+        max_so_far = 0
+
+        for item in A:
+            max_ending_here += item
+            if max_ending_here <= 0:
+                max_ending_here = 0
+            if max_so_far < max_ending_here:
+                max_so_far = max_ending_here
+
+        if max_so_far == 0:
+            return max(A)
+
+        min_ending_here = 0
+        min_so_far = 0
+
+        for item in A:
+            min_ending_here += item
+            if min_ending_here >= 0:
+                min_ending_here = 0
+            if min_so_far > min_ending_here:
+                min_so_far = min_ending_here
+
+        return max(max_so_far, sum(A) - min_so_far)
