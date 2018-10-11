@@ -67,6 +67,17 @@ class Solution:  # noqa: F811
         return maxSum if maxSum < 0 else max(maxSum, total - minSum)
 
 
+"""
+靠..总算看明白了下面这个
+解决环形类问题的关键有两个
+1.直接暴力数组x2一下 就像我上面做的那个solution
+2.看看能不能做一个 "极" 的转化
+比如说这道题, 最大子数组要么是连在一起出现在A0到An-1之间
+要么是套环 从A0到Ai 然后中间断开 再从Aj到An-1 相当于从Aj到Ai
+那这个时候其实就是要在A0到An-1之间找一个最小子数组, 这样剩下两边的数就最大了
+"""
+
+
 class Solution:  # noqa: F811
     def maxSubarraySumCircular(self, A):
         """
