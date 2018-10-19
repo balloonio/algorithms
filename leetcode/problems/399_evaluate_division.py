@@ -1,3 +1,10 @@
+"""
+union find
+base_unit_conversion is like union
+evaluate is like find
+"""
+
+
 class Solution:
     def __init__(self):
         self.var2unit = {}  # to base unit
@@ -65,7 +72,106 @@ class Solution:
 
 
 """
-union find
-base_unit_conversion is like union
-evaluate is like find
+使用单源多点最短路算法
 """
+
+
+class Solution(object):  # noqa : F811
+    def calcEquation(self, equations, values, queries):
+        """
+        :type equations: List[List[str]]
+        :type values: List[float]
+        :type queries: List[List[str]]
+        :rtype: List[float]
+        """
+
+        # build graph edges between each symbol with weight
+        vertx2id = {}
+        for i, eq in enumerate(equations):
+            x, y = eq
+            if x not in vertx2id:
+                vertx2id[x] = len(vertx2id)
+            if y not in vertx2id:
+                vertx2id[y] = len(vertx2id)
+
+        n = len(vertx2id)
+        dist = [
+            [math.inf] * n for _ in range(n)
+        ]  # dist[x][y] gives the multiplier: symbol x = dist[x][y] * symbol y
+        path = [
+            [""] * n for _ in range(n)
+        ]  # path[x][y] gives the last vertex before y to achieve the curr dist[x][y]
+        for i, eq in enumerate(equations):
+            x, y = eq
+            x, y = vertx2id[x], vertx2id[y]
+            dist[x][y] = values[i]
+            dist[y][x] = 1 / values[i]
+            path[x][y] = x
+
+        for intermediate in range(n):
+            for start in range(n):
+                for end in range(n):
+                    if (
+                        dist[start][end]
+                        > dist[start][intermediate] * dist[intermediate][end]
+                    ):
+                        dist[start][end] = (
+                            dist[start][intermediate] * dist[intermediate][end]
+                        )
+                        path[start][end] = intermediate
+
+        result = []
+        for query in queries:
+            x, y = query
+            if x not in vertx2id or y not in vertx2id:
+                result.append(-1.0)
+            else:
+                x, y = vertx2id[x], vertx2id[y]
+                result.append(dist[x][y] if dist[x][y] != math.inf else -1.0)
+        return result
+
+
+"""
+DFS
+"""
+
+
+class Solution:  # noqa : F811
+    def calcEquation(self, equations, values, queries):
+        """
+        :type equations: List[List[str]]
+        :type values: List[float]
+        :type queries: List[List[str]]
+        :rtype: List[float]
+        """
+        if not equations:
+            return [-1.0] * len(queries)
+
+        graph = collections.defaultdict(dict)
+
+        for (st, ed), val in zip(equations, values):
+            graph[st][st] = graph[ed][ed] = 1.0
+            graph[st][ed] = val
+            graph[ed][st] = 1 / val
+
+        def dfs(st, ed, visited):
+            # if st in visited: return -1.0 #reach a circle
+            visited.add(st)
+            if ed in graph[st]:
+                return graph[st][ed]
+
+            for nb in graph[st]:
+                if nb not in visited:
+                    tmp = dfs(nb, ed, visited)
+                    if tmp != -1.0:
+                        return graph[st][nb] * tmp
+            return -1.0
+
+        ret = []
+        for st, ed in queries:
+            if st not in graph or ed not in graph:
+                ret.append(-1.0)
+            else:
+                visited = set()
+                ret.append(dfs(st, ed, visited))
+        return ret
