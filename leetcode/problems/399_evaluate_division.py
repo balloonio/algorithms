@@ -1,4 +1,87 @@
 """
+DFS或BFS
+先构造图
+通过collections.defaultdict(dict)来构造邻接表
+self.sym2edges[x][y] = div 表示x和y相连接 div是x/y的ratio
+在寻求query结果的过程中
+如果x和y都在记忆化结果里, 那他们应当有相同的unit,直接两两之间的ratio计算出结果
+如果x y任意一个不在记忆化结果里, 那我们就通过dfs或是bfs,根据所有的edge去马克这相连的一整片图,
+把他们马克成同一个unit x或是y
+如果马克完还是没有在记忆化结果里,说明input里没有这个数
+如果马克完 x和y都在记忆化结果里 但是unit不一样 说明x和y其实不是来自同一片图 两两没有conversion
+"""
+
+
+class Solution(object):
+    def calcEquation(self, equations, values, queries):
+        """
+        :type equations: List[List[str]]
+        :type values: List[float]
+        :type queries: List[List[str]]
+        :rtype: List[float]
+        """
+        if not equations or not values:
+            return [-1.0] * len(queries)
+
+        self.sym2edges = collections.defaultdict(dict)
+        eqvals = zip(equations, values)
+
+        # 构造图的邻接表
+        for (x, y), div in eqvals:
+            self.sym2edges[x][y] = div
+            self.sym2edges[y][x] = 1 / div
+
+        # 构造记忆化ratio结果
+        self.sym2val = collections.defaultdict(list)
+        result = []
+        for (x, y) in queries:
+            if x not in self.sym2val:
+                # go find x if input has x
+                if x in self.sym2edges:
+                    self.convert_all_connect(x, 1, x)
+                    # self.convert_all_connect_bfs(x, 1, x)
+            if y not in self.sym2val:
+                # go find y if input has y
+                if y in self.sym2edges:
+                    self.convert_all_connect(y, 1, y)
+                    # self.convert_all_connect_bfs(y, 1, y)
+            # now both should in result
+            if x not in self.sym2val or y not in self.sym2val:
+                result.append(-1.0)
+                continue
+            xratio, xunit = self.sym2val[x]
+            yratio, yunit = self.sym2val[y]
+            if xunit != yunit:
+                result.append(-1.0)
+                continue
+            result.append(xratio / yratio)
+        return result
+
+    def convert_all_connect(self, sym, ratio, unit):
+        if sym in self.sym2val:
+            return
+        self.sym2val[sym] = [ratio, unit]
+        for next_sym, next_ratio in self.sym2edges[sym].items():
+            self.convert_all_connect(next_sym, ratio / next_ratio, unit)
+        return
+
+    def convert_all_connect_bfs(self, sym, ratio, unit):
+        if sym in self.sym2val:
+            return
+        q = collections.deque()
+        q.append((sym, ratio, unit))
+
+        while q:
+            (sym, ratio, unit) = q.popleft()
+            self.sym2val[sym] = [ratio, unit]
+            for next_sym, next_ratio in self.sym2edges[sym].items():
+                if next_sym in self.sym2val:
+                    continue
+                q.append((next_sym, ratio / next_ratio, unit))
+        return
+
+
+"""
 union find
 base_unit_conversion is like union
 evaluate is like find
