@@ -48,4 +48,10 @@ One trick here is that, we can just use one queue for all the gate entry points
 However, we need to keep the visited set different for each gate's traversal
 Reason is: If all gates can reach this room, we need to know the smallest distance
 So we need to let other gate traverse to this room even if one gate already visited
+update:之前写的note有点问题,其实只要一个visited就够了,因为所有的门里只有已经有门在现在这个门之前
+visit了这个地方,说明其距离一定是小于等于当先这个BFS level的
+这是一个典型的多起点多终点的bfs,和assign bike那道题联合记忆
+再更正一下....好像有些时候是需要分开visited set的,比如说bike那道题,一个人找到了最近的自行车之后就停住了
+但是其他人还需要继续找,如果公用一个visited set的话其他人找车时候的距离是要受到已经结束的那个人
+的visited set影响的
 """
