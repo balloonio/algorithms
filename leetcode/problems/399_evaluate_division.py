@@ -88,7 +88,7 @@ evaluate is like find
 """
 
 
-class Solution:
+class Solution:  # noqa: F811
     def __init__(self):
         self.var2unit = {}  # to base unit
         self.var2mult = {}  # to multiplier

@@ -57,7 +57,7 @@ class Node(object):
 """
 
 
-class Solution(object):
+class Solution(object):  # noqa: F811
     def preorder(self, root, result=None):
         """
         :type root: Node
