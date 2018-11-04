@@ -49,7 +49,7 @@ L20 第二次提交漏掉了 这里因为是数组最大和 所以就算pop的�
 """
 
 
-class Solution:  # noqa: F811
+class Solution:  # noqa: F811, E0102
     def maxSubarraySumCircular(self, A):
         """
         :type A: List[int]
@@ -78,7 +78,7 @@ class Solution:  # noqa: F811
 """
 
 
-class Solution:  # noqa: F811
+class Solution:  # noqa: F811, E0102
     def maxSubarraySumCircular(self, A):
         """
         :type A: List[int]
@@ -108,3 +108,42 @@ class Solution:  # noqa: F811
                 min_so_far = min_ending_here
 
         return max(max_so_far, sum(A) - min_so_far)
+
+
+class Solution(object):  # noqa: F811, E0102
+    def maxSubarraySumCircular(self, A):
+        """
+        :type A: List[int]
+        :rtype: int
+        """
+        if not A:
+            return 0
+
+        totalsum = sum(A)
+        maxsum1 = self.get_max_subsum(A)
+
+        if max(A) < 0:
+            return maxsum1
+
+        # reverse sign
+        for i, num in enumerate(A):
+            A[i] = -num
+
+        minsum = 0 - self.get_max_subsum(A)
+        maxsum2 = totalsum - minsum
+
+        return max(maxsum1, maxsum2)
+
+    def get_max_subsum(self, A):
+        ps = [0]
+        for num in A:
+            ps.append(ps[-1] + num)
+
+        maxsum = -math.inf
+        for i, prefixsum in enumerate(ps):
+            if i == 0:
+                minps = prefixsum
+            else:
+                maxsum = max(maxsum, prefixsum - minps)
+                minps = min(minps, prefixsum)
+        return maxsum
