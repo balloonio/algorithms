@@ -13,6 +13,7 @@ parameter是frequency， eg freq=2 表示每两秒产生一个token。
 #include <ctime>
 #include <unistd.h>
 #include <iostream>
+#include <assert.h>
 
 // no threading version
 class TokenGenerator
@@ -83,6 +84,22 @@ int main( int argc, char ** argv )
     sleep(1);
     std::cout << "sleep for 1 seconds\n";
     std::cout << "Try fetch 10, actual fetch " << tkg.getToken(10) << "\n";
+
+    // assert test
+    TokenGenerator tkg2(1);
+    sleep(3);
+    assert(tkg2.getToken(2) == 2);
+    assert(tkg2.getToken(3) == 1);
+
+    sleep(10);
+    assert(tkg2.getToken(1000) == 10);
+
+    sleep(4);
+    assert(tkg2.getToken(1) == 1);
+
+    sleep(5);
+    assert(tkg2.getToken(2) == 2);
+    assert(tkg2.getToken(1000) == 6);
 
     return 0;
 }
