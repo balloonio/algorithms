@@ -14,6 +14,8 @@ parameter是frequency， eg freq=2 表示每两秒产生一个token。
 #include <unistd.h>
 #include <iostream>
 #include <assert.h>
+#include <thread>
+#include <mutex>
 
 // no threading version
 class TokenGenerator
@@ -59,47 +61,139 @@ size_t TokenGenerator::getToken( size_t n )
     }
 }
 
+// threading version
+class TokenQueue
+{
+public:
+    TokenQueue( size_t secIntvl )
+    : secIntvl_( secIntvl )
+    , remainToken_( 0 )
+    , generating_( true )
+    { } 
+
+    ~TokenQueue()
+    { }
+
+    size_t getToken( size_t n );
+    std::thread genTokenThread();
+    void stopGenerating();
+
+private:
+    void genToken();
+
+    size_t secIntvl_;
+    size_t remainToken_;
+    std::mutex lock_;
+    std::atomic<bool> generating_;
+};
+
+size_t TokenQueue::getToken( size_t n )
+{
+    lock_.lock();
+    size_t fetched = (n >= remainToken_) ? remainToken_ : n ;
+    remainToken_ -= fetched;
+    lock_.unlock();
+    return fetched;
+}
+
+std::thread TokenQueue::genTokenThread()
+{
+    return std::thread(&TokenQueue::genToken, this);
+}
+
+void TokenQueue::stopGenerating()
+{
+    generating_ = false;
+}
+
+void TokenQueue::genToken()
+{
+    while ( generating_ )
+    {
+        lock_.lock();
+        //std::cout << "Remaining token is " << remainToken_ << ", incrementing by 1 \n";
+        remainToken_ += 1;
+        lock_.unlock();
+        sleep(secIntvl_);
+    }
+}
 
 int main( int argc, char ** argv )
 {
-    TokenGenerator tkg(2);
-    std::cout << "Construct token generater with second interval 2 \n";
+    bool threadingVersion = true;
 
-    // expect fetch 0
-    sleep(0);
-    std::cout << "sleep for 0 seconds\n";
-    std::cout << "Try fetch 10, actual fetch " << tkg.getToken(10) << "\n";
+    if ( !threadingVersion )
+    {
+        /******* no threading version ********/
 
-    // expect fetch 1
-    sleep(2);
-    std::cout << "sleep for 2 seconds\n";
-    std::cout << "Try fetch 10, actual fetch " << tkg.getToken(10) << "\n";
+        TokenGenerator tkg(2);
+        std::cout << "Construct token generater with second interval 2 \n";
 
-    // expect fetch 0
-    sleep(4);
-    std::cout << "sleep for 4 seconds\n";
-    std::cout << "Try fetch 0, actual fetch " << tkg.getToken(0) << "\n";
+        // expect fetch 0
+        sleep(0);
+        std::cout << "sleep for 0 seconds\n";
+        std::cout << "Try fetch 10, actual fetch " << tkg.getToken(10) << "\n";
 
-    // expect fetch 2
-    sleep(1);
-    std::cout << "sleep for 1 seconds\n";
-    std::cout << "Try fetch 10, actual fetch " << tkg.getToken(10) << "\n";
+        // expect fetch 1
+        sleep(2);
+        std::cout << "sleep for 2 seconds\n";
+        std::cout << "Try fetch 10, actual fetch " << tkg.getToken(10) << "\n";
 
-    // assert test
-    TokenGenerator tkg2(1);
-    sleep(3);
-    assert(tkg2.getToken(2) == 2);
-    assert(tkg2.getToken(3) == 1);
+        // expect fetch 0
+        sleep(4);
+        std::cout << "sleep for 4 seconds\n";
+        std::cout << "Try fetch 0, actual fetch " << tkg.getToken(0) << "\n";
 
-    sleep(10);
-    assert(tkg2.getToken(1000) == 10);
+        // expect fetch 2
+        sleep(1);
+        std::cout << "sleep for 1 seconds\n";
+        std::cout << "Try fetch 10, actual fetch " << tkg.getToken(10) << "\n";
 
-    sleep(4);
-    assert(tkg2.getToken(1) == 1);
+        // assert test
+        TokenGenerator tkg2(1);
+        sleep(3);
+        assert(tkg2.getToken(2) == 2);
+        assert(tkg2.getToken(3) == 1);
 
-    sleep(5);
-    assert(tkg2.getToken(2) == 2);
-    assert(tkg2.getToken(1000) == 6);
+        sleep(10);
+        assert(tkg2.getToken(1000) == 10);
+
+        sleep(4);
+        assert(tkg2.getToken(1) == 1);
+
+        sleep(5);
+        assert(tkg2.getToken(2) == 2);
+        assert(tkg2.getToken(1000) == 6);
+    }
+    else 
+    {
+        /******* no threading version ********/
+        TokenQueue tq(2);
+        std::thread genTokenThread = tq.genTokenThread();
+
+        // expect fetch 1
+        sleep(0);
+        std::cout << "sleep for 0 seconds\n";
+        std::cout << "Try fetch 10, actual fetch " << tq.getToken(10) << "\n";
+
+        // expect fetch 1
+        sleep(2);
+        std::cout << "sleep for 2 seconds\n";
+        std::cout << "Try fetch 10, actual fetch " << tq.getToken(10) << "\n";
+
+        // expect fetch 0
+        sleep(4);
+        std::cout << "sleep for 4 seconds\n";
+        std::cout << "Try fetch 0, actual fetch " << tq.getToken(0) << "\n";
+
+        // expect fetch 2
+        sleep(1);
+        std::cout << "sleep for 1 seconds\n";
+        std::cout << "Try fetch 10, actual fetch " << tq.getToken(10) << "\n";
+
+        tq.stopGenerating();
+        genTokenThread.join();
+    }
 
     return 0;
 }
