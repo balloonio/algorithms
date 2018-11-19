@@ -39,3 +39,42 @@ class Solution:
 
 
 # L35 bug f[i][j] = f[i-1][j-1] or f[i][j-1]
+
+"""
+memo search
+"""
+class Solution:
+    def __init__(self):
+        self.memo = {}
+
+    def isMatchList(self, s, si, p, pi):
+        # print(s, si, p, pi)
+        if (si, pi) in self.memo:
+            return self.memo[si, pi]
+
+        if si == len(s):
+            self.memo[si, pi] = p[pi:].count("*") == len(p) - pi
+            return self.memo[si, pi]
+        if pi == len(p):
+            self.memo[si, pi] = not s[si:]
+            return self.memo[si, pi]
+
+        if p[pi] == "?" or p[pi] == s[si]:
+            self.memo[si, pi] = self.isMatchList(s, si + 1, p, pi + 1)
+        elif p[pi] == "*":
+            self.memo[si, pi] = self.isMatchList(s, si + 1, p, pi) or self.isMatchList(s, si, p, pi + 1)
+        else:
+            self.memo[si, pi] = False
+        return self.memo[si, pi]
+
+    def isMatch(self, s, p):
+        """
+        :type s: str
+        :type p: str
+        :rtype: bool
+        """
+        s = list(s)
+        p = list(p)
+        result = self.isMatchList(s, 0, p, 0)
+        # print(self.memo)
+        return result
